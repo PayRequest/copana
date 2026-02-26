@@ -1,0 +1,24 @@
+# Copana Automation Schedule
+# Edit with: crontab -e
+# Adjust paths and times to your setup.
+#
+# All scripts are optional — Copana works fine without any of them.
+# They just add proactive behavior between Claude Code sessions.
+
+# Morning briefing (7:00 AM)
+0 7 * * * cd /path/to/copana && python3 scripts/morning_briefing.py >> logs/cron.log 2>&1
+
+# Proactive pings (10:00, 14:00, 18:00)
+0 10,14,18 * * * cd /path/to/copana && python3 scripts/proactive_ping.py >> logs/cron.log 2>&1
+
+# Evening check-in (21:30)
+30 21 * * * cd /path/to/copana && python3 scripts/evening_checkin.py >> logs/cron.log 2>&1
+
+# Daily reflection (23:00)
+0 23 * * * cd /path/to/copana && python3 scripts/daily_reflection.py >> logs/cron.log 2>&1
+
+# Weekly review (Sunday 20:00)
+0 20 * * 0 cd /path/to/copana && python3 scripts/weekly_review.py >> logs/cron.log 2>&1
+
+# News briefing (standalone, if not part of morning briefing)
+# 0 8 * * * cd /path/to/copana && python3 scripts/news_briefing.py --send >> logs/cron.log 2>&1

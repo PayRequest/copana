@@ -1,0 +1,27 @@
+# Environment
+.env
+.copana_configured
+
+# Logs
+logs/*.log
+
+# Data (cached state)
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if using any JS plugins)
+node_modules/
