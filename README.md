@@ -54,21 +54,25 @@ Copana is a **template repository** for [Claude Code](https://claude.ai/code). W
 
 ```
 copana/
-├── CLAUDE.md          # AI instructions (auto-read by Claude Code)
-├── soul.md            # AI identity & values
-├── personality.md     # How the AI talks
-├── user.md            # About you (AI fills this in over time)
-├── preferences.md     # Your likes/dislikes
-├── memory.md          # Long-term memory & session log
-├── tasks.md           # Active tasks
-├── insights.md        # Strategy & follow-ups
-├── routines.md        # Your daily patterns
-├── contacts.md        # Important people
-├── projects.md        # Bigger initiatives
-├── journal.md         # Daily reflections
-├── .claude/skills/    # Setup, customize, add-telegram, etc.
-├── scripts/           # Optional automations
-└── docs/              # Full documentation
+├── CLAUDE.md              # AI instructions (auto-read by Claude Code)
+├── soul.md                # AI identity & values
+├── personality.md         # How the AI talks
+├── user.md                # About you (AI fills this in over time)
+├── preferences.md         # Your likes/dislikes
+├── memory.md              # Long-term memory & session log
+├── tasks.md               # Active tasks
+├── insights.md            # Strategy & follow-ups
+├── routines.md            # Your daily patterns
+├── contacts.md            # Important people
+├── projects.md            # Bigger initiatives
+├── journal.md             # Daily reflections
+├── .claude/
+│   ├── settings.json      # Status line config
+│   ├── agents/            # Custom subagents (memory-manager, research, daily-review)
+│   ├── output-styles/     # Personality as output style
+│   └── skills/            # Setup, customize, add-telegram, etc.
+├── scripts/               # Optional automations
+└── docs/                  # Full documentation
 ```
 
 ### The Memory System
@@ -124,12 +128,47 @@ Copana uses Claude Code skills for extensibility. Instead of bloated features, s
 | `/add-telegram` | Set up Telegram bot for mobile access |
 | `/add-fitness` | Add workout tracking and gym accountability |
 | `/add-budget` | Add personal budget tracking |
+| `/add-agent` | Create a custom subagent |
 
 ### Contributing skills
 
 Want to add Slack support? Don't create a PR that adds Slack. Create a skill file (`.claude/skills/add-slack/SKILL.md`) that teaches Claude how to add Slack to any Copana installation. Users run `/add-slack` and get clean, tailored code.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## Subagents
+
+Copana ships with specialized Claude Code subagents that handle background work:
+
+| Agent | What it does | Model |
+|-------|-------------|-------|
+| `memory-manager` | Consolidates memory files, removes duplicates, archives old sessions | Haiku (fast) |
+| `research` | Web research with structured output, saved to your files | Default |
+| `daily-review` | Reviews all files, writes daily summary to journal.md | Haiku (fast) |
+
+Subagents have restricted tool access (e.g., memory-manager can't browse the web) and persistent memory across sessions.
+
+Create your own with `/add-agent` or drop a markdown file in `.claude/agents/`.
+
+---
+
+## Status Line
+
+Copana adds a status line to your Claude Code terminal showing:
+
+- **Open tasks** from tasks.md
+- **Open loops** from memory.md
+- **Last session** timestamp
+
+Always visible, refreshes every 30 seconds. Configured in `.claude/settings.json`.
+
+---
+
+## Output Style
+
+Copana includes an output style (`.claude/output-styles/copana.md`) that shapes how your AI communicates — direct, casual, no filler. This works alongside `personality.md` to give your AI a consistent voice without bloating `CLAUDE.md`.
 
 ---
 
@@ -168,11 +207,13 @@ See [docs/multi-device.md](docs/multi-device.md) for setup.
 | **Setup** | `git clone` + `/setup` | Docker + Node.js | None |
 | **Infrastructure** | None | Container runtime | Cloud service |
 | **Memory** | Structured markdown (12 files) | Per-group CLAUDE.md | None |
-| **Personality** | `soul.md` + `personality.md` | None | System prompt |
+| **Personality** | `soul.md` + output style | None | System prompt |
 | **Personal context** | `user.md` + `preferences.md` | None | None |
 | **Active learning** | Captures facts silently | None | None |
 | **Proactive behavior** | Nudges, reflections, briefings | Scheduled tasks | None |
-| **Extensibility** | Skills (`.claude/skills/`) | Skills | Plugins vary |
+| **Subagents** | memory-manager, research, daily-review | None | None |
+| **Status line** | Open tasks, loops, last session | None | None |
+| **Extensibility** | Skills + agents | Skills | Plugins vary |
 | **Privacy** | Local files, git-versioned | Container | Cloud |
 | **Token footprint** | ~14k tokens (7% of window) | ~35k tokens (17%) | N/A |
 

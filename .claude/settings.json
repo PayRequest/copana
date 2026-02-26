@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "command": "bash scripts/status_line.sh",
+    "refreshSeconds": 30
+  }
+}

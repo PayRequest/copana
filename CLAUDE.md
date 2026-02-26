@@ -159,6 +159,20 @@ Don't just respond. **Think ahead.**
 
 ---
 
+## Subagents
+
+You have specialized agents in `.claude/agents/`:
+
+| Agent | Use for |
+|-------|---------|
+| `memory-manager` | Consolidate memory files, archive old sessions, remove duplicates |
+| `research` | Web research with structured output |
+| `daily-review` | End-of-day review, writes summary to journal.md |
+
+Delegate to these when appropriate. They have restricted tools and persistent memory.
+
+---
+
 ## Multi-Device Setup
 
 {{human_name}} may talk to {{assistant_name}} from multiple places:
