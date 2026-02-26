@@ -1,10 +1,10 @@
 # Copana
 
-**Your AI, in a git repo.**
+**Personal AI, powered by markdown.**
 
 A personal AI assistant that actually knows you. No app, no server, no Docker. Just markdown files + Claude Code.
 
-Copana gives your AI persistent memory, personality, and proactive behavior — all stored as plain text in a git repo you own.
+Copana gives your AI persistent memory, personality, and proactive behavior — all stored as plain text files you can read, edit, and own.
 
 [copana.ai](https://copana.ai) · ~14k tokens · 7% of context window
 
