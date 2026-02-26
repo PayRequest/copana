@@ -204,10 +204,10 @@ See [docs/multi-device.md](docs/multi-device.md) for setup.
 
 | | Copana | NanoClaw | OpenClaw |
 |---|--------|----------|----------|
-| **Source files** | 15 | 15 | 3,680 |
-| **Lines of code** | ~3,900 | ~3,900 | 434,453 |
-| **Dependencies** | <10 | <10 | 70 |
-| **Config files** | 0 | 0 | 53 |
+| **Source files** | 50 | 15 | 3,680 |
+| **Lines of code** | ~3,600 | ~3,900 | 434,453 |
+| **Dependencies** | 5 | <10 | 70 |
+| **Config files** | 1 | 0 | 53 |
 | **Time to understand** | 8 minutes | 8 minutes | 1–2 weeks |
 | **Security model** | OS container isolation | OS container isolation | Application-level checks |
 | **Architecture** | Single process + isolated containers | Single process + isolated containers | Single process, shared memory |
