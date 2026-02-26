@@ -98,4 +98,4 @@ Skills we'd like to see:
 
 ## Questions?
 
-Open an issue or reach out on X [@geertjansloos](https://x.com/geertjansloos).
+Open an issue or start a discussion on GitHub.

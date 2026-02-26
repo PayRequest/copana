@@ -16,11 +16,11 @@ Copana gives your AI persistent memory, personality, and proactive behavior — 
 
 ## Why I Built This
 
-I built a personal AI assistant for myself called Sloosbot. It runs in Claude Code, stores everything in markdown files, and actually knows me — my goals, my patterns, my open tasks, my preferences. After a month of use it felt like having a co-founder who never forgets anything.
+I built a personal AI assistant that runs in Claude Code, stores everything in markdown files, and actually knows me — my goals, my patterns, my open tasks, my preferences. After a month of use it felt like having a co-founder who never forgets anything.
 
-The problem: it was tightly coupled to my life. Hardcoded names, personal scripts, specific integrations.
+The problem: it was tightly coupled to my setup. Hardcoded names, personal scripts, specific integrations.
 
-So I extracted the framework. Copana is the generalized version — everything that made Sloosbot useful, packaged so anyone can have the same experience in 30 seconds.
+So I extracted the framework. Copana is the generalized version — packaged so anyone can have the same experience in 30 seconds.
 
 No Docker, no server, no build step. Just `git clone` and go.
 
@@ -136,7 +136,7 @@ Copana uses Claude Code skills for extensibility. Instead of bloated features, s
 
 ### Contributing skills
 
-Want to add Slack support? Don't create a PR that adds Slack. Create a skill file (`.claude/skills/add-slack/SKILL.md`) that teaches Claude how to add Slack to any Copana installation. Users run `/add-slack` and get clean, tailored code.
+Want to add Slack support? Don't create a PR that adds Slack. Create a skill file that teaches Claude how to add Slack to any Copana installation. Users run the skill and get clean, tailored code.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
@@ -208,7 +208,7 @@ See [docs/multi-device.md](docs/multi-device.md) for setup.
 
 | | Copana | NanoClaw | OpenClaw |
 |---|--------|----------|----------|
-| **Source files** | 50 | 15 | 3,680 |
+| **Source files** | ~50 | 15 | 3,680 |
 | **Lines of code** | ~3,600 | ~3,900 | 434,453 |
 | **Dependencies** | 5 | <10 | 70 |
 | **Config files** | 1 | 0 | 53 |
