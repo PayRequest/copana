@@ -1,6 +1,10 @@
-# Copana
+<p align="center">
+  <img src="copana-logo.png" alt="Copana" width="200">
+</p>
 
-**Personal AI, powered by markdown.**
+<h1 align="center">Copana</h1>
+
+<p align="center"><strong>Personal AI, powered by markdown.</strong></p>
 
 A personal AI assistant that actually knows you. No app, no server, no Docker. Just markdown files + Claude Code.
 
