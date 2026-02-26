@@ -202,20 +202,28 @@ See [docs/multi-device.md](docs/multi-device.md) for setup.
 
 ## Comparison
 
-| | Copana | NanoClaw | Generic AI |
-|---|--------|----------|------------|
-| **Setup** | `git clone` + `/setup` | Docker + Node.js | None |
-| **Infrastructure** | None | Container runtime | Cloud service |
-| **Memory** | Structured markdown (12 files) | Per-group CLAUDE.md | None |
-| **Personality** | `soul.md` + output style | None | System prompt |
-| **Personal context** | `user.md` + `preferences.md` | None | None |
+| | Copana | NanoClaw | OpenClaw |
+|---|--------|----------|----------|
+| **Source files** | 15 | 15 | 3,680 |
+| **Lines of code** | ~3,900 | ~3,900 | 434,453 |
+| **Dependencies** | <10 | <10 | 70 |
+| **Config files** | 0 | 0 | 53 |
+| **Time to understand** | 8 minutes | 8 minutes | 1–2 weeks |
+| **Security model** | OS container isolation | OS container isolation | Application-level checks |
+| **Architecture** | Single process + isolated containers | Single process + isolated containers | Single process, shared memory |
+| **Setup** | `git clone` + `/setup` | Docker + Node.js | `npm install -g` + onboard wizard |
+| **Infrastructure** | None | Container runtime | Node ≥22 |
+| **Memory** | Structured markdown (12 files) | Per-group CLAUDE.md | Per-agent sessions |
+| **Personality** | `soul.md` + output style | None | None |
+| **Personal context** | `user.md` + `preferences.md` | None | Workspace config |
 | **Active learning** | Captures facts silently | None | None |
-| **Proactive behavior** | Nudges, reflections, briefings | Scheduled tasks | None |
-| **Subagents** | memory-manager, research, daily-review | None | None |
+| **Proactive behavior** | Nudges, reflections, briefings | Scheduled tasks | Cron + webhooks |
+| **Subagents** | memory-manager, research, daily-review | None | Multi-agent routing |
+| **Channels** | CLI + mobile (git sync) | CLI | WhatsApp, Telegram, Slack, Discord, Signal, iMessage + 6 more |
 | **Status line** | Open tasks, loops, last session | None | None |
-| **Extensibility** | Skills + agents | Skills | Plugins vary |
-| **Privacy** | Local files, git-versioned | Container | Cloud |
-| **Token footprint** | ~14k tokens (7% of window) | ~35k tokens (17%) | N/A |
+| **Extensibility** | Skills + agents | Skills | Skills + tools + channels |
+| **Privacy** | Local files, git-versioned | Container | Local gateway (127.0.0.1) |
+| **Token footprint** | ~14k tokens (7% of window) | ~35k tokens (17%) | — |
 
 ---
 
