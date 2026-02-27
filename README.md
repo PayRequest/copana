@@ -34,9 +34,11 @@ cd copana
 claude
 ```
 
-Then run `/setup`. Claude handles everything: names, timezone, personality, first commit.
+Then run `/setup` inside Claude Code. It asks your name, AI name, timezone, and vibe — then handles everything including your first commit.
 
-Or use the shell script: `./setup.sh`
+**Alternative:** Run `./setup.sh` directly if you prefer the shell.
+
+For the full walkthrough, see [docs/getting-started.md](docs/getting-started.md).
 
 ---
 
@@ -259,6 +261,16 @@ Copana is a structured system, not just a prompt. It includes a memory architect
 
 ---
 
+## Documentation
+
+- [Getting Started](docs/getting-started.md) — Setup walkthrough and first steps
+- [Memory System](docs/memory-system.md) — How the 12-file memory architecture works
+- [Automation](docs/automation.md) — Morning briefings, nudges, Telegram bot
+- [Multi-Device](docs/multi-device.md) — Sync across Mac and mobile
+- [Philosophy](docs/philosophy.md) — Why plain text, why markdown, why local
+
+---
+
 ## Philosophy
 
 Copana is built on a simple idea: **your AI should know you**.
@@ -266,8 +278,6 @@ Copana is built on a simple idea: **your AI should know you**.
 Not through a proprietary database or a cloud service — through plain text files that you own, stored in a git repo you control.
 
 The best personal AI isn't the smartest model. It's the one with the most context about *you*.
-
-Read more: [docs/philosophy.md](docs/philosophy.md)
 
 ---
 
