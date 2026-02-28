@@ -1,0 +1,25 @@
+# Copana Automation Schedule — Agent SDK Edition
+# Uses `claude -p` (Claude Code Agent SDK) instead of Python scripts.
+# No Python, no pip, no API keys needed — just Claude Code installed.
+#
+# Edit with: crontab -e
+# Adjust paths and times to your setup.
+#
+# Requires: Claude Code CLI (`claude`) installed and authenticated.
+
+COPANA_DIR=/path/to/copana
+
+# Morning briefing (7:00 AM)
+0 7 * * * cd $COPANA_DIR && claude -p "Read memory.md, tasks.md, and insights.md. Generate a morning briefing: what's due today, overdue items, open loops needing attention, and one motivational nudge. Keep it under 15 lines." --allowedTools "Read,Glob,Grep" --output-format json 2>>logs/cron.log | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Proactive ping (14:00)
+0 14 * * * cd $COPANA_DIR && claude -p "Read tasks.md and memory.md. Find the single most important thing that needs attention right now — overdue task, stale open loop, or upcoming deadline. Reply with just that one thing in 1-2 sentences." --allowedTools "Read,Glob,Grep" --output-format json 2>>logs/cron.log | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Daily reflection (23:00)
+0 23 * * * cd $COPANA_DIR && claude -p "Review all markdown files. Write a daily reflection to journal.md: tasks completed, open loops status, patterns noticed, and suggested focus for tomorrow. Keep it under 10 lines." --allowedTools "Read,Write,Edit,Glob,Grep" --output-format json 2>>logs/cron.log
+
+# Weekly review (Sunday 20:00)
+0 20 * * 0 cd $COPANA_DIR && claude -p "Do a weekly review. Read all files. Summarize: what got done this week, what slipped, any patterns in journal.md entries, and 3 priorities for next week. Write the review to journal.md." --allowedTools "Read,Write,Edit,Glob,Grep" --output-format json 2>>logs/cron.log
+
+# Memory cleanup (Sunday 3:00 AM)
+0 3 * * 0 cd $COPANA_DIR && claude -p "Run memory maintenance: archive session logs older than 7 days from memory.md to memory/archive/, remove completed tasks older than 2 weeks from tasks.md, deduplicate entries across files." --allowedTools "Read,Write,Edit,Glob,Grep" --model haiku --output-format json 2>>logs/cron.log

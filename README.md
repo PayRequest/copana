@@ -178,9 +178,27 @@ Copana includes an output style (`.claude/output-styles/copana.md`) that shapes 
 
 ---
 
-## Optional: Automation Scripts
+## Optional: Automation
 
-Copana works great with just `claude` and markdown files. But if you want proactive behavior between sessions, there are optional automation scripts:
+Copana works great with just `claude` and markdown files. But if you want proactive behavior between sessions, there are two approaches:
+
+### Agent SDK (Recommended)
+
+Use `claude -p` to run automations headlessly. No Python, no API keys, no extra dependencies:
+
+```bash
+# Morning briefing via cron
+0 7 * * * cd /path/to/copana && claude -p "Read memory.md and tasks.md. What needs my attention today? Keep it under 15 lines." --allowedTools "Read,Glob,Grep" --output-format json | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Daily reflection — writes directly to your files
+0 23 * * * cd /path/to/copana && claude -p "Review all files. Write a daily summary to journal.md." --allowedTools "Read,Write,Edit,Glob,Grep"
+```
+
+The agent reads your Copana files automatically — no manual context loading needed. See `scripts/crontab-sdk.example` for a full schedule.
+
+### Python Scripts
+
+For more control or Telegram bot support, use the Python scripts:
 
 | Script | What it does |
 |--------|-------------|
@@ -194,7 +212,7 @@ Copana works great with just `claude` and markdown files. But if you want proact
 
 Setup: `pip install -r scripts/requirements.txt` + add API keys to `.env`.
 
-See [docs/automation.md](docs/automation.md) for details.
+See [docs/automation.md](docs/automation.md) for both approaches.
 
 ---
 

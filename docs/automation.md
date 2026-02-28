@@ -1,10 +1,106 @@
 # Automation
 
-Optional scripts that add proactive behavior between Claude Code sessions.
+Optional automations that add proactive behavior between Claude Code sessions.
 
 **None of these are required.** Copana works perfectly with just `claude` and your markdown files.
 
-## Setup
+There are **two approaches** — pick whichever fits you:
+
+| Approach | What you need | Best for |
+|----------|--------------|----------|
+| **Agent SDK** (`claude -p`) | Claude Code installed | Simple setup, no Python needed |
+| **Python scripts** | Python + API key + pip | More customizable, Telegram bot support |
+
+---
+
+## Option A: Agent SDK (Recommended)
+
+Uses Claude Code's built-in `-p` flag to run automations headlessly. No Python, no API keys, no dependencies — just Claude Code.
+
+### How it works
+
+```bash
+# Claude reads your memory files, generates a briefing, outputs as JSON
+claude -p "Read memory.md and tasks.md. What needs attention today?" \
+  --allowedTools "Read,Glob,Grep" \
+  --output-format json
+```
+
+The agent has full access to your Copana files and context — no need to manually load anything.
+
+### Setup
+
+```bash
+crontab -e
+```
+
+Add from `scripts/crontab-sdk.example`:
+
+```bash
+COPANA_DIR=/path/to/copana
+
+# Morning briefing (7:00 AM)
+0 7 * * * cd $COPANA_DIR && claude -p "Read memory.md, tasks.md, and insights.md. Generate a morning briefing: what's due today, overdue items, open loops needing attention, and one motivational nudge. Keep it under 15 lines." --allowedTools "Read,Glob,Grep" --output-format json | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Proactive ping (14:00)
+0 14 * * * cd $COPANA_DIR && claude -p "Read tasks.md and memory.md. Find the single most important thing that needs attention right now. Reply in 1-2 sentences." --allowedTools "Read,Glob,Grep" --output-format json | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Daily reflection (23:00)
+0 23 * * * cd $COPANA_DIR && claude -p "Review all markdown files. Write a daily reflection to journal.md: tasks completed, open loops status, patterns noticed, suggested focus for tomorrow. Keep it under 10 lines." --allowedTools "Read,Write,Edit,Glob,Grep" --output-format json
+
+# Weekly review (Sunday 20:00)
+0 20 * * 0 cd $COPANA_DIR && claude -p "Do a weekly review. Read all files. Summarize what got done, what slipped, patterns, and 3 priorities for next week. Write to journal.md." --allowedTools "Read,Write,Edit,Glob,Grep" --output-format json
+
+# Memory cleanup (Sunday 3:00 AM)
+0 3 * * 0 cd $COPANA_DIR && claude -p "Archive session logs older than 7 days from memory.md to memory/archive/. Remove completed tasks older than 2 weeks. Deduplicate entries." --allowedTools "Read,Write,Edit,Glob,Grep" --model haiku --output-format json
+```
+
+### Notifications
+
+Pipe the output to your notification channel:
+
+```bash
+# ntfy.sh (free, no account)
+... --output-format json | jq -r '.result' | curl -s -d @- ntfy.sh/YOUR_TOPIC
+
+# Telegram
+... --output-format json | jq -r '.result' | curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" -d "chat_id=$CHAT_ID" -d "text=$(cat -)"
+```
+
+### Structured output
+
+Use `--json-schema` to get structured results for further processing:
+
+```bash
+claude -p "List all overdue tasks from tasks.md" \
+  --output-format json \
+  --json-schema '{"type":"object","properties":{"tasks":{"type":"array","items":{"type":"string"}},"count":{"type":"integer"}}}'
+```
+
+### Continue conversations
+
+Chain related automations using `--continue`:
+
+```bash
+# Morning: run analysis
+claude -p "Analyze my tasks and open loops" --allowedTools "Read,Glob,Grep"
+
+# Afternoon: follow up on the same context
+claude -p "Any updates on what we discussed this morning?" --continue --allowedTools "Read,Glob,Grep"
+```
+
+### Tips
+
+- Use `--model haiku` for simple tasks (faster, cheaper)
+- Use `--allowedTools` to restrict what Claude can do (read-only for briefings, read+write for reflections)
+- Pipe to `>> logs/cron.log 2>&1` for debugging
+- Test with `claude -p "..." --output-format json | jq -r '.result'` before adding to cron
+
+---
+
+## Option B: Python Scripts
+
+More control, more customizable, supports the always-running Telegram bot.
 
 ### 1. Install dependencies
 
