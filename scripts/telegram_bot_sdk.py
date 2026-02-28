@@ -27,6 +27,7 @@ import logging
 import subprocess
 from pathlib import Path
 from datetime import datetime
+from typing import Optional, List
 
 from dotenv import load_dotenv
 
@@ -58,7 +59,7 @@ def log(message: str):
         f.write(log_line + '\n')
 
 
-def get_session_id() -> str | None:
+def get_session_id() -> Optional[str]:
     """Get the current session ID for conversation continuity."""
     if SESSION_FILE.exists():
         try:
@@ -91,6 +92,9 @@ def ask_claude(message: str) -> str:
     if session_id:
         cmd.extend(['--resume', session_id])
 
+    # Clean env: remove Claude Code session vars to avoid nested session error
+    clean_env = {k: v for k, v in os.environ.items() if not k.startswith('CLAUDECODE')}
+
     try:
         result = subprocess.run(
             cmd,
@@ -98,6 +102,7 @@ def ask_claude(message: str) -> str:
             capture_output=True,
             text=True,
             timeout=120,
+            env=clean_env,
         )
 
         if result.returncode != 0:
@@ -118,6 +123,7 @@ def ask_claude(message: str) -> str:
                     capture_output=True,
                     text=True,
                     timeout=120,
+                    env=clean_env,
                 )
                 if result.returncode != 0:
                     return f"Error: {result.stderr.strip()[:200]}"
@@ -178,7 +184,7 @@ def handle_checkin_callback(data: str) -> str:
     return response
 
 
-def split_message(text: str, max_length: int = 4096) -> list[str]:
+def split_message(text: str, max_length: int = 4096) -> List[str]:
     """Split long messages into Telegram-friendly chunks."""
     if len(text) <= max_length:
         return [text]
